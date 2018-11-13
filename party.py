@@ -7,8 +7,7 @@ from trytond.pyson import Eval
 __all__ = ['Party']
 
 
-class Party:
-    __metaclass__ = PoolMeta
+class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
 
     allow_edi = fields.Boolean('Allow EDI', help='Allow EDI communications')
