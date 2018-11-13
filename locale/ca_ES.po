@@ -1,0 +1,19 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:party.party,allow_edi:"
+msgid "Allow EDI"
+msgstr "Permet EDI"
+
+msgctxt "field:party.party,edi_operational_point:"
+msgid "EDI Operational Point"
+msgstr "Punt Operacional EDI"
+
+msgctxt "help:party.party,allow_edi:"
+msgid "Allow EDI communications"
+msgstr "Permet comunicacions amb el protocol EDI"
+
+msgctxt "view:party.party:"
+msgid "EDI"
+msgstr "EDI"
