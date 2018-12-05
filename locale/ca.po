@@ -2,6 +2,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+msgctxt "field:party.address,edi_ean:"
+msgid "EDI EAN code"
+msgstr "Codi EAN EDI"
+
 msgctxt "field:party.party,allow_edi:"
 msgid "Allow EDI"
 msgstr "Permet EDI"
@@ -13,6 +17,10 @@ msgstr "Punt Operacional EDI"
 msgctxt "help:party.party,allow_edi:"
 msgid "Allow EDI communications"
 msgstr "Permet comunicacions amb el protocol EDI"
+
+msgctxt "view:party.address:"
+msgid "EDI"
+msgstr "EDI"
 
 msgctxt "view:party.party:"
 msgid "EDI"
