@@ -3,12 +3,11 @@
 from trytond.model import fields
 from trytond.pool import PoolMeta
 
-__all__ = ['Party']
+__all__ = ['Address']
 
 
-class Party:
+class Address:
     __metaclass__ = PoolMeta
-    __name__ = 'party.party'
+    __name__ = 'party.address'
 
-    allow_edi = fields.Boolean('Allow EDI', help='Allow EDI communications')
-    edi_operational_point = fields.Char('EDI Operational Point', size=35)
+    edi_ean = fields.Char('EDI EAN code', size=35)
