@@ -6,9 +6,6 @@
         <page id="edi" string="EDI">
             <label name="allow_edi"/>
             <field name="allow_edi"/>
-            <newline/>
-            <label name="edi_operational_point"/>
-            <field name="edi_operational_point"/>
         </page>
     </xpath>
 </data>
