@@ -9,4 +9,5 @@ def register():
     Pool.register(
         address.Address,
         party.Party,
+        party.PartyIdentifier,
         module='party_edi', type_='model')
