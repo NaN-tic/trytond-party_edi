@@ -42,8 +42,6 @@ class PartyIdentifier(metaclass=PoolMeta):
     __name__ = 'party.identifier'
 
     @classmethod
-    def get_types(cls):
-        types = super(PartyIdentifier, cls).get_types()
-        types.append(('edi', 'EDI Operational Point'))
-        return types
-
+    def __setup__(cls):
+        super(PartyIdentifier, cls).__setup__()
+        cls.type.selection.append(('edi', 'EDI Operational Point'))
