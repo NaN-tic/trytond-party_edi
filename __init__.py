@@ -8,6 +8,6 @@ from . import address
 def register():
     Pool.register(
         address.Address,
+        party.Configuration,
         party.Party,
-        party.PartyIdentifier,
         module='party_edi', type_='model')

@@ -3,7 +3,16 @@
 from trytond.model import fields
 from trytond.pool import PoolMeta, Pool
 
-__all__ = ['Party', 'PartyIdentifier']
+__all__ = ['Configuration', 'Party']
+
+
+class Configuration(metaclass=PoolMeta):
+    __name__ = 'party.configuration'
+
+    @classmethod
+    def __setup__(cls):
+        super().__setup__()
+        cls.identifier_types.selection += [('edi', 'EDI Operational Point')]
 
 
 class Party(metaclass=PoolMeta):
@@ -36,11 +45,3 @@ class Party(metaclass=PoolMeta):
                             'type': 'edi',
                             'code': value,
                             }])
-
-
-class PartyIdentifier(metaclass=PoolMeta):
-    __name__ = 'party.identifier'
-
-    @classmethod
-    def get_types(cls):
-        return super().get_types() + [('edi', 'EDI Operational Point')]
