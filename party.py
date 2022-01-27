@@ -1,9 +1,26 @@
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
-from trytond.model import fields
+from trytond.model import fields, ModelSQL, ModelView
 from trytond.pool import PoolMeta, Pool
 
-__all__ = ['Configuration', 'Party']
+SUPPLIER_TYPE = [
+    ('NADSCO', 'Legal Supplier'),
+    ('NADBCO', 'Legal Purchaser'),
+    ('NADSU', 'Supplier'),
+    ('NADBY', 'Purchaser'),
+    ('NADII', 'Invoice Issuer'),
+    ('NADIV', 'Invoice Receiver'),
+    ('NADDP', 'Stock Receiver'),
+    ('NADPW', 'NADPW'),
+    ('NADPE', 'NADPE'),
+    ('NADPR', 'Payment Issuer'),
+    ('NADDL', 'Endorser'),
+    ('NAD', 'NAD'),
+    ('NADMR', 'Message Receiver'),
+    ('NADUC', 'Final Receiver'),
+    ('NADSH', 'Sender'),
+    ('NADMS', 'Message Sender')
+    ]
 
 
 class Configuration(metaclass=PoolMeta):
@@ -45,3 +62,61 @@ class Party(metaclass=PoolMeta):
                             'type': 'edi',
                             'code': value,
                             }])
+
+
+class SupplierEdiMixin(ModelSQL, ModelView):
+    type_ = fields.Selection(SUPPLIER_TYPE, 'Type')
+    edi_code = fields.Char('Edi Code')
+    name = fields.Char('Name')
+    commercial_register = fields.Char('Comercial Register')
+    street = fields.Char('Street')
+    city = fields.Char('City')
+    zip = fields.Char('zip')
+    vat = fields.Char('Vat')
+    country_code = fields.Char('Country_code')
+    party = fields.Many2One('party.party', 'Party')
+    address = fields.Many2One('party.address', 'Address')
+
+    def read_NADBIV(self, message):
+        self.type_ = 'NADBIV'
+        self.edi_code = message.pop(0) if message else ''
+        if message:
+            self.vat = message.pop(0)
+
+    def read_NADPW(self, message):
+        self.type_ = 'NADPW'
+        self.edi_code = message.pop(0) if message else ''
+
+    def read_NADSH(self, message):
+        self.type_ = 'NADSH'
+        self.edi_code = message.pop(0) if message else ''
+
+    def read_NADUC(self, message):
+        self.type_ = 'NADUC'
+        self.edi_code = message.pop(0) if message else ''
+
+    def search_party(self):
+        pool = Pool()
+        PartyId = pool.get('party.identifier')
+        PartyAddress = pool.get('party.address')
+
+        domain = []
+        if self.edi_code:
+            domain += [('type', '=', 'edi'), ('code', '=', self.edi_code)]
+        if domain == []:
+            return
+        identifier = PartyId.search(domain, limit=1)
+        if identifier:
+            self.party = identifier[0].party
+        elif hasattr(self, 'vat'):
+            domain = [('type', '=', 'vat'), ('code', '=', self.vat)]
+            identifier = PartyId.search(domain, limit=1)
+            if identifier:
+                self.party = identifier[0].party
+        domain = [('edi_ean', '=', self.edi_code)]
+        addresses = PartyAddress.search(domain, limit=1)
+        if addresses:
+            self.address = addresses[0]
+            if not hasattr(self, 'party'):
+                self.party = self.address.party
+        return
