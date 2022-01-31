@@ -77,6 +77,10 @@ class SupplierEdiMixin(ModelSQL, ModelView):
     party = fields.Many2One('party.party', 'Party')
     address = fields.Many2One('party.address', 'Address')
 
+    def read_NADMR(self, message):
+        self.type_ = 'NADMR'
+        self.edi_code = message.pop(0) if message else ''
+
     def read_NADBIV(self, message):
         self.type_ = 'NADBIV'
         self.edi_code = message.pop(0) if message else ''
