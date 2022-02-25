@@ -99,6 +99,10 @@ class SupplierEdiMixin(ModelSQL, ModelView):
         self.type_ = 'NADUC'
         self.edi_code = message.pop(0) if message else ''
 
+    def read_NADPR(self, message):
+        self.type_ = 'NADPR'
+        self.edi_code = message.pop(0) if message else ''
+
     def search_party(self):
         pool = Pool()
         PartyId = pool.get('party.identifier')
