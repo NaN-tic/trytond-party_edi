@@ -17,9 +17,13 @@ class TestCase(ModuleTestCase):
         Configuration = pool.get('party.configuration')
         PartyIdentifier = pool.get('party.identifier')
 
-        _TYPE = ('edi', 'EDI Operational Point')
+        _TYPE = ('edi_head', 'EDI Operational Point (Head Office)')
         self.assertTrue(_TYPE in Configuration.identifier_types.selection)
         self.assertTrue(_TYPE in PartyIdentifier.get_types())
+        _TYPE = ('edi_pays', 'EDI Operational Point (Who Pays)')
+        self.assertTrue(_TYPE in Configuration.identifier_types.selection)
+        self.assertTrue(_TYPE in PartyIdentifier.get_types())
+
 
 def suite():
     suite = trytond.tests.test_tryton.suite()
