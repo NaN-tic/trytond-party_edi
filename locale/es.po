@@ -10,9 +10,13 @@ msgctxt "field:party.party,allow_edi:"
 msgid "Allow EDI"
 msgstr "Permite EDI"
 
-msgctxt "field:party.party,edi_operational_point:"
-msgid "EDI Operational Point"
-msgstr "Punto Operacional EDI"
+msgctxt "field:party.party,edi_operational_point_head:"
+msgid "EDI Operational Point (Head Office)"
+msgstr "Punto Operacional EDI (Central)"
+
+msgctxt "field:party.party,edi_operational_point_pay:"
+msgid "EDI Operational Point (Who Pays)"
+msgstr "Punto Operacional EDI (Pagador)"
 
 msgctxt "help:party.party,allow_edi:"
 msgid "Allow EDI communications"
