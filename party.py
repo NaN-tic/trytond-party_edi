@@ -29,37 +29,68 @@ class Configuration(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super().__setup__()
-        cls.identifier_types.selection += [('edi', 'EDI Operational Point')]
+        cls.identifier_types.selection += [('edi_head', 'EDI Operational Point'
+                '(Head Office)')]
+        cls.identifier_types.selection += [('edi_pay', 'EDI Operational Point'
+                '(Who Pays)')]
 
 
 class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
 
     allow_edi = fields.Boolean('Allow EDI', help='Allow EDI communications')
-    edi_operational_point = fields.Function(
-        fields.Char('EDI Operational Point', size=35),
-        'get_edi_operational_point', setter='set_edi_operational_point')
+    edi_operational_point_head = fields.Function(
+        fields.Char('EDI Operational Point (Head Office)', size=35),
+        'get_edi_operational_point_head',
+        setter='set_edi_operational_point_head')
+    edi_operational_point_pay = fields.Function(
+        fields.Char('EDI Operational Point (Who Pays)', size=35),
+        'get_edi_operational_point_pay',
+        setter='set_edi_operational_point_pay')
 
-    def get_edi_operational_point(self, name=None):
+    def get_edi_operational_point_head(self, name=None):
         for identifier in self.identifiers:
-            if identifier.type == 'edi':
+            if identifier.type == 'edi_head':
                 return identifier.code
         return None
 
     @classmethod
-    def set_edi_operational_point(cls, parties, name, value):
+    def set_edi_operational_point_head(cls, parties, name, value):
         Identifier = Pool().get('party.identifier')
         for party in parties:
             identifier = Identifier.search([
                     ('party', '=', party.id),
-                    ('type', '=', 'edi')
+                    ('type', '=', 'edi_head')
                 ], limit=1)
             if identifier:
                 Identifier.write([identifier[0]], {'code': value})
             else:
                 Identifier.create([{
                             'party': party,
-                            'type': 'edi',
+                            'type': 'edi_head',
+                            'code': value,
+                            }])
+
+    def get_edi_operational_point_pay(self, name=None):
+        for identifier in self.identifiers:
+            if identifier.type == 'edi_pay':
+                return identifier.code
+        return None
+
+    @classmethod
+    def set_edi_operational_point_pay(cls, parties, name, value):
+        Identifier = Pool().get('party.identifier')
+        for party in parties:
+            identifier = Identifier.search([
+                    ('party', '=', party.id),
+                    ('type', '=', 'edi_pay')
+                ], limit=1)
+            if identifier:
+                Identifier.write([identifier[0]], {'code': value})
+            else:
+                Identifier.create([{
+                            'party': party,
+                            'type': 'edi_pay',
                             'code': value,
                             }])
 
@@ -110,7 +141,7 @@ class SupplierEdiMixin(ModelSQL, ModelView):
 
         domain = []
         if self.edi_code:
-            domain += [('type', '=', 'edi'), ('code', '=', self.edi_code)]
+            domain += [('type', '=', 'edi_head'), ('code', '=', self.edi_code)]
         if domain == []:
             return
         identifier = PartyId.search(domain, limit=1)
