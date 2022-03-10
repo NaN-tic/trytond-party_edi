@@ -29,10 +29,10 @@ class Configuration(metaclass=PoolMeta):
     @classmethod
     def __setup__(cls):
         super().__setup__()
-        cls.identifier_types.selection += [('edi_head', 'EDI Operational Point'
-                '(Head Office)')]
-        cls.identifier_types.selection += [('edi_pay', 'EDI Operational Point'
-                '(Who Pays)')]
+        cls.identifier_types.selection += [
+            ('edi_head', 'EDI Operational Point (Head Office)')]
+        cls.identifier_types.selection += [
+            ('edi_pay', 'EDI Operational Point (Who Pays)')]
 
 
 class Party(metaclass=PoolMeta):
