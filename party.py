@@ -95,6 +95,11 @@ class Party(metaclass=PoolMeta):
                             }])
 
 
+class Address(metaclass=PoolMeta):
+    __name__ = 'party.address'
+    type_ = fields.Selection(SUPPLIER_TYPE, 'Type')
+
+
 class SupplierEdiMixin(ModelSQL, ModelView):
     type_ = fields.Selection(SUPPLIER_TYPE, 'Type')
     edi_code = fields.Char('Edi Code')

@@ -10,4 +10,5 @@ def register():
         address.Address,
         party.Configuration,
         party.Party,
+        party.Address,
         module='party_edi', type_='model')
