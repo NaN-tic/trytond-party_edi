@@ -6,6 +6,8 @@
         <page id="edi" string="EDI">
             <label name="allow_edi"/>
             <field name="allow_edi"/>
+            <newline/>
+            <field colspan="4" name="products_zero_value"/>
         </page>
     </xpath>
 </data>

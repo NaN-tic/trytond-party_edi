@@ -1,6 +1,6 @@
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
-from trytond.model import fields, ModelSQL, ModelView
+from trytond.model import fields, ModelSQL, ModelView, ValueMixin
 from trytond.pool import PoolMeta, Pool
 
 SUPPLIER_TYPE = [
@@ -35,6 +35,17 @@ class Configuration(metaclass=PoolMeta):
             ('edi_pay', 'EDI Operational Point (Who Pays)')]
 
 
+class PartyProduct(ModelSQL):
+    "Party Product"
+    __name__ = 'party.party-product.product'
+
+    party = fields.Many2One(
+        'party.party', "Party", ondelete='CASCADE', required=True, select=True)
+    product = fields.Many2One(
+        'product.product', "Product", ondelete='CASCADE', required=True,
+        select=True)
+
+
 class Party(metaclass=PoolMeta):
     __name__ = 'party.party'
 
@@ -47,6 +58,9 @@ class Party(metaclass=PoolMeta):
         fields.Char('EDI Operational Point (Who Pays)', size=35),
         'get_edi_operational_point_pay',
         setter='set_edi_operational_point_pay')
+    products_zero_value = fields.Many2Many(
+        'party.party-product.product', 'party', 'product',
+        "Products Zero Value")
 
     def get_edi_operational_point_head(self, name=None):
         for identifier in self.identifiers:
@@ -132,6 +146,10 @@ class SupplierEdiMixin(ModelSQL, ModelView):
 
     def read_NADPR(self, message):
         self.type_ = 'NADPR'
+        self.edi_code = message.pop(0) if message else ''
+
+    def read_NADCA(self, message):
+        self.type_ = 'NADCA'
         self.edi_code = message.pop(0) if message else ''
 
     def search_party(self):
