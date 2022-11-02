@@ -107,6 +107,7 @@ class SupplierEdiMixin(ModelSQL, ModelView):
     country_code = fields.Char('Country_code')
     party = fields.Many2One('party.party', 'Party')
     address = fields.Many2One('party.address', 'Address')
+    section = fields.Char('Section')
 
     def read_NADMR(self, message):
         self.type_ = 'NADMR'
