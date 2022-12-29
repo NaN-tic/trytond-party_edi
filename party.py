@@ -108,6 +108,8 @@ class SupplierEdiMixin(ModelSQL, ModelView):
     party = fields.Many2One('party.party', 'Party')
     address = fields.Many2One('party.address', 'Address')
     section = fields.Char('Section')
+    cip = fields.Char('CIP', help="Supplier's internal code, "
+        "assigned by the buyer")
 
     def read_NADMR(self, message):
         self.type_ = 'NADMR'
